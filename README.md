@@ -1,7 +1,7 @@
 # NextStep AI
 
 > **AI-powered scholarship discovery platform for Pakistani students and global applicants.**  
-> Built by a 4-member university team as a capstone project.
+> Built by a 5-member team as a capstone project in Aurattech Fellowship
 
 NextStep AI helps Pakistani students discover scholarships they legitimately qualify for. By providing an academic and financial profile (CGPA, study discipline, domicile province, household income bracket, and country preferences), the platform instantly matches the student against **79 verified scholarships**, evaluates 5 hard eligibility gates, computes a weighted fit score, and enriches top opportunities with AI-driven explanations and an actionable application roadmap.
 
@@ -160,85 +160,6 @@ NextStepAI/
 8. RoadmapScreen tracks required documentation checklists and upcoming deadlines.
 
 9. ParentViewScreen displays an aggregate cost comparison table with full Print/PDF export.
-```
 
----
-
-## 🔐 Authentication & Database Reality
-
-- **Scholarship Catalog**: Persisted in SQLite (`database/nextstepai.db`) and Excel (`backend/data/*.xlsx`).
-- **Student Sign-in**: Currently maintained exclusively in frontend memory (`App.jsx` React state).
-- **Security Note**: There is no live `/register` or `/login` endpoint on the backend. Submitting login stores the user in client state for that session only. The `students` table in SQLite is reserved for future backend authentication.
-
----
-
-## 🚀 Running Locally
-
-Open **3 separate terminal windows**:
-
-### Terminal 1: Backend Matching Engine
-```powershell
-cd backend
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
-```
-*Healthcheck:* [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
-
-### Terminal 2: AI RAG Evidence Layer
-```powershell
-cd ai-rag
-# Optional: create .env and add GEMINI_API_KEY
-copy .env.example .env
-..\backend\venv\Scripts\uvicorn.exe app.main:app --reload --port 8001
-```
-*Healthcheck:* [http://127.0.0.1:8001/](http://127.0.0.1:8001/)
-
-### Terminal 3: Frontend Client
-```powershell
-cd frontend
-npm install
-npm run dev
-```
-*App URL:* [http://localhost:5173/](http://localhost:5173/)
-
----
-
-## 🌐 Production Deployment Guide
-
-All 3 services can be hosted on **100% Free Tiers**:
-
-| Service | Recommended Host | Root Directory | Build Command | Start Command |
-|---|---|---|---|---|
-| **Frontend** | [Vercel](https://vercel.com) | `frontend` | `npm run build` | *Automatic (Vite)* |
-| **Backend** | [Render](https://render.com) | `backend` | `pip install -r requirements.txt` | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
-| **AI RAG** | [Render](https://render.com) | `ai-rag` | `pip install -r requirements.txt` | `uvicorn app.main:app --host 0.0.0.0 --port $PORT` |
-
-### Step 1: Deploy Backend on Render
-1. Create a new **Web Service** on Render and connect your GitHub repository.
-2. Set **Root Directory**: `backend`
-3. Set **Runtime**: `Python 3`
-4. Set **Build Command**: `pip install -r requirements.txt`
-5. Set **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-6. Note your live backend URL (e.g., `https://nextstepai-backend.onrender.com`).
-
-### Step 2: Deploy AI RAG on Render
-1. Create another **Web Service** pointing to the same repository.
-2. Set **Root Directory**: `ai-rag`
-3. Set **Build Command**: `pip install -r requirements.txt`
-4. Set **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Under **Environment Variables**, add:
-   - `MEMBER_A_BASE_URL`: Your deployed backend URL (from Step 1)
-   - `GEMINI_API_KEY`: Your Google Gemini API Key
-6. Note your live RAG URL (e.g., `https://nextstepai-rag.onrender.com`).
-
-### Step 3: Deploy Frontend on Vercel
-1. Create a new project on Vercel and import your repository.
-2. Set **Root Directory**: `frontend`
-3. Under **Environment Variables**, configure:
-   - `VITE_API_BASE`: `https://nextstepai-backend.onrender.com`
-   - `VITE_AI_RAG_BASE`: `https://nextstepai-rag.onrender.com`
-4. Click **Deploy**. Vercel serves the SPA at your custom domain or `*.vercel.app`.
 
 
